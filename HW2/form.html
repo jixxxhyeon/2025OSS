@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .add_button{
+            background-color: green; 
+            border: 1px solid green;
+            color: white
+        }
+        .clear_button{
+            background-color: blue;
+            border: 1px solid blue; 
+            color: white
+        }
+
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h1>Dynamic Web page</h1>
+
+        <div class="container">
+            <input id="input" type="text" placeholder="항목을 입력하세요.">
+            <button class="add_button"; id="add_btn" type="button">추가</button>
+            <button class="clear_button"; id="clear_btn" type="button">삭제</button>
+        </div>
+
+        <ul id="list"></ul>
+    </div>
+
+    <script>
+        window.onload = function () {
+          let input = document.getElementById('input');
+          let list  = document.getElementById('list');
+          let add   = document.getElementById('add_btn');
+          let clear = document.getElementById('clear_btn');
+      
+          add.addEventListener('click', function() {
+            let text = input.value.trim();
+            if (text === '') return;      
+      
+            let li = document.createElement('li');
+            li.textContent = text;
+            list.appendChild(li);
+      
+            input.value = '';                  
+            input.focus();                     
+          });
+      
+          clear.addEventListener('click', function () {
+            list.innerHTML = '';
+            input.focus();
+          });
+        };
+      </script>
+
+</body>
+</html>

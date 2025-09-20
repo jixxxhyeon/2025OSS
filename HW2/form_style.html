@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            background-color: #f8f9fa;
+            align-items: center;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, "Noto Sans KR",
+               "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+            
+        }
+        h2{
+            font-weight: 500; 
+            width: 635px;
+        }
+        .container{
+            padding: 0px 450px 0px 450px;
+        }
+        .div_navtop{
+            padding: 30px 0px 30px 0px;
+        }
+        .div_main{
+            place-items: center;
+        }
+        .name{
+            display: grid;
+            grid-template-columns: 310px 310px;
+            grid-template-rows: 70px;
+            gap: 15px;
+            padding: 10px 7px;
+        }
+        .firstname, .lastname{
+            display: grid;
+        }
+        .username{
+            display: grid;
+            grid-template-columns: 635px;
+            height: 70px;
+            padding: 10px 7px;
+        }
+        .email{
+            display: grid;
+            grid-template-columns: 635px;
+            height: 70px;
+            padding: 10px 7px;
+        }
+        .address{
+            display: grid;
+            grid-template-columns: 635px;
+            height: 70px;
+            padding: 10px 7px;
+        }
+        .address2{
+            display: grid;
+            grid-template-columns: 635px;
+            height: 70px;
+            padding: 10px 7px;
+        }
+        .etc{
+            display: grid;
+            grid-template-columns: 240px 205px 160px;
+            grid-template-rows: 70px;
+            gap: 15px;
+            padding: 10px 7px;
+        }
+        .country{
+            display: grid;
+        }
+        .state{
+            display: grid;
+        }
+        .zip{
+            display: grid;
+        }
+        .divider{
+            width: 635px;
+        }
+        .check{
+            display: grid;
+            grid-template-columns: 635px;
+            height: 70px;
+            padding: 10px 7px;
+        }
+        .card_info1{
+            display: grid;
+            grid-template-columns: 310px 310px;
+            grid-template-rows: 70px;
+            gap: 15px;
+            padding: 10px 7px;
+        }
+        .card_info2{
+            display: grid;
+            grid-template-columns: 310px 310px;
+            grid-template-rows: 70px;
+            gap: 15px;
+            padding: 10px 7px;
+        }
+        .card_info1_name, .card_info1_number{
+            display: grid;
+        }
+        .card_info2_left, .card_info2_right{
+            display: grid;
+            grid-template-columns: 145px 145px;
+            grid-template-rows: 70px;
+            gap: 20px;
+        }
+        .left_date, .left_cvv{
+            display: grid;
+        }
+        .card_type{
+            width: 635px;
+        }
+        .submit_btn{
+            margin-left: 80px;
+            border-radius: 5px;
+            background-color: #0d6efd;
+            border: 1px solid #0d6efd;
+            color: white;
+            outline: none;
+            width: 635px;
+            height: 35px;
+            margin-bottom: 100px;
+        }
+        .textarea_section{
+            width: 635px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="div_navtop">
+            <h1 style="font-weight: 500; text-align: center;">Checkout form</h1>
+            <p style="font-size: 20px; font-weight: 300; text-align: center;">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
+        </div>
+        <div class="div_main">
+            <h2 >Billing address</h2>
+            <div class="name">
+                <div class="firstname">
+                    <label for="input_firstname">First name</label>
+                    <input type="text" name="firstname" id="input_firstname"/>
+                </div>
+                <div class="lastname">
+                    <label for="input_lastname">Last name</label>
+                    <input type="text" name="lastname" id="input_lastname"/>
+                </div>
+            </div>
+            <div class="username">
+                <label for="input_username">Username</label>
+                <input type="text" name="username" id="input_username" placeholder="Username"/>
+            </div>
+            <div class="email">
+                <label for="input_email">Email (Optional)</label>
+                <input type="text" name="email" id="input_email" placeholder="you@example.com"/>
+            </div>
+            <div class="address">
+                <label for="input_address">Address</label>
+                <input type="text" name="address" id="input_address" placeholder="1234 Main st"/>
+            </div>
+            <div class="address2">
+                <label for="input_address2">Address 2 (Optional)</label>
+                <input type="text" name="address2" id="input_address2" placeholder="Apartment or suite"/>
+            </div>
+            <div class="etc">
+                <div class="country">
+                    <label for="input_country">Country</label>
+                    <select name="country" id="input_country">
+                        <option selected>Choose...</option>
+                        <option>United States</option>
+                    </select>
+                </div>
+                <div class="state">
+                    <label for="input_state">State</label>
+                    <select name="state" id="input_state">
+                        <option selected>Choose...</option>
+                        <option>California</option>
+                    </select>
+                </div>
+                <div class="zip">
+                    <label for="input_zip">Zip</label>
+                    <input type="text" name="zip" id="input_zip"/>
+                </div>
+            </div>
+            <hr class="divider">
+            <div class="check">
+                <div>
+                    <input type="checkbox" name="input_checkbox" id="input_checkbox_1"/>
+                    <label for="input_checkbox_1">Shipping address is the same as my billing address</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="input_checkbox" id="input_checkbox_2"/>
+                    <label for="input_checkbox_2">Save this information for next time</label>
+                </div>
+            </div>
+            <hr class="divider">
+            <h2 style="font-weight: 500; ">Payment</h2>
+            <div class="card_type">
+                <input type="radio" name="input_radio" id="input_radio_1"/>
+                <label for="input_radio_1">Credit card</label><br />
+                <input type="radio" name="input_radio" id="input_radio_2"/>
+                <label for="input_radio_2">Debit card</label><br />
+                <input type="radio" name="input_radio" id="input_radio_3"/>
+                <label for="input_radio_3">PayPal</label>
+            </div>
+            <div class="card_info1">
+                <div class="card_info1_name">
+                    <label for="input_cardname">Name on card</label>
+                    <input type="text" name="cardname" id="input_cardname"/>
+                </div>
+                <div class="card_info1_number">
+                    <label for="input_cardnumber">Credit card number</label>
+                    <input type="text" name="cardnumber" id="input_cardnumber"/>
+                </div>
+            </div>
+
+            <div class="card_info2">
+                <div class="card_info2_left">
+                    <div class="left_date">
+                        <label for="input_date">Expiration</label>
+                        <input type="date" name="date" id="input_date"/>
+                    </div>
+                    <div class="left_cvv">
+                        <label for="input_cvv">CVV</label>
+                        <input type="text" name="CVV" id="input_cvv"/>
+                    </div>
+                </div>
+                <div class="card_info2_right"></div>
+            </div>
+            <div class="textarea_section">
+                <label for="input_textarea">Additional notes (Optional)</label><br /><br />
+                <textarea name="textarea" id="input_textarea" rows="4" cols="50" placeholder="Write your notes here..."></textarea>
+            </div>
+            <hr class="divider">
+            <input class="submit_btn" type="submit" value="Continue to checkout"/>
+        </div>
+    </div>
+</body>
+</html>
