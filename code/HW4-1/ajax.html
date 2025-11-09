@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>AJAX 실습(XHR)</title>
+    <style>
+        body { 
+            font-family: system-ui, sans-serif; 
+            margin: 24px; 
+        }
+        #contents { 
+            background: white; 
+            padding: 12px; 
+            min-height: 140px; 
+        }
+        .row { 
+            margin: 8px 0; 
+            display: flex; 
+            gap: 8px; 
+            flex-wrap: wrap; 
+        }
+        input { 
+            padding: 6px 8px; 
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 12px; 
+        }
+        th, td { 
+            border-bottom: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: left; 
+        }
+        small.mono { 
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace; 
+            color: #666; 
+        }
+        .actions button { 
+            margin-right: 6px; 
+        }
+    </style>
+</head>
+<body>
+
+    <h1>AJAX 실습(XHR) Data list</h1>
+    <p class="small">API: <span class="mono">GET/POST/PUT/DELETE http://localhost:3001/data</span></p>
+
+    <!-- Get 버튼 -->
+    <div class="row">
+    <button id="btnLoad">데이터 가져오기</button>
+    </div>
+
+    <!-- 입력 폼 Post, Put은 공용으로 -->
+    <div class="row">
+    <input id="id" type="hidden">
+    <input id="name" placeholder="name">
+    <input id="username" placeholder="username">
+    <input id="email" placeholder="email">
+    <input id="phone" placeholder="phone" style="width:140px">
+    <input id="city" placeholder="city">
+    <input id="district" placeholder="district">
+    <button id="btnSave">Save</button>
+    <button id="btnCancel" type="button" hidden>Cancel</button>
+    </div>
+
+    <!-- 결과 -->
+    <div id="contents"></div>
+
+    <script>
+    const BASE = 'http://localhost:3001';
+    const $ = id => document.getElementById(id);
+    const contents = $('contents');
+
+    window.onload = function () {
+        $('btnLoad').addEventListener('click', getList);
+        $('btnSave').addEventListener('click', saveData);
+        $('btnCancel').addEventListener('click', resetForm);
+        getList(); 
+    };
+
+    /* 읽어오기(READ) */
+    function getList() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', BASE + '/data');
+        xhr.setRequestHeader('content-type', 'application/json');
+        xhr.send();
+
+        xhr.onload = () => {
+        if (xhr.status === 200) {
+            const rows = JSON.parse(xhr.response);
+            contents.innerHTML = renderTable(rows);
+        } else {
+            console.log(xhr.status, xhr.statusText);
+        }
+        }
+    }
+
+    /* 보기(View) */
+    function renderTable(rows) {
+        if (!Array.isArray(rows)) return '<p>데이터가 없습니다.</p>';
+        const thead = `
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th><th>Name</th><th>Username</th><th>Email</th>
+                <th>Phone</th><th>City</th><th>District</th><th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            ${rows.map(r => `
+                <tr>
+                <td>${r.id}</td>
+                <td>${r.name ?? ''}</td>
+                <td>${r.username ?? ''}</td>
+                <td>${r.email ?? ''}</td>
+                <td>${r.phone ?? ''}</td>
+                <td>${r.city ?? ''}</td>
+                <td>${r.district ?? ''}</td>
+                <td class="actions">
+                    <button onclick='fillForm(${JSON.stringify(slim(r)).replace(/'/g,"&apos;")})'>Edit</button>
+                    <button onclick="removeData(${r.id})">Del</button>
+                </td>
+                </tr>
+            `).join('')}
+            </tbody>
+        </table>
+        `;
+        return thead;
+    }
+
+    function slim(r){
+        return {
+        id: r.id,
+        name: r.name || '',
+        username: r.username || '',
+        email: r.email || '',
+        phone: r.phone || '',
+        city: r.city || '',
+        district: r.district || ''
+        };
+    }
+
+    /* 생성, 수정하기 */
+    function saveData(e){
+        e.preventDefault();
+
+        const payload = {
+            name: $('name').value.trim(),
+            username: $('username').value.trim(),
+            email: $('email').value.trim(),
+            phone: $('phone').value.trim(),
+            city: $('city').value.trim(),
+            district: $('district').value.trim()
+        };
+
+        const editingId = $('id').value;
+
+        if (editingId) {
+            // Put
+            const xhr = new XMLHttpRequest();
+            xhr.open('PUT', `${BASE}/data/${editingId}`);
+            xhr.setRequestHeader('content-type', 'application/json; charset=UTF-8');
+            xhr.send(JSON.stringify({ id: Number(editingId), ...payload }));
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                resetForm();
+                getList();
+                } else {
+                console.log(xhr.status, xhr.statusText);
+                }
+            };
+        } else {
+            // Post
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', BASE + '/data');
+            xhr.setRequestHeader('content-type', 'application/json; charset=UTF-8');
+            xhr.send(JSON.stringify(payload));
+            xhr.onload = () => {
+                if (xhr.status === 201) {
+                resetForm();
+                getList();
+                } else {
+                console.log(xhr.status, xhr.statusText);
+                }
+            };
+        }
+    }
+
+    function fillForm(r){
+        $('id').value = r.id;
+        $('name').value = r.name;
+        $('username').value = r.username;
+        $('email').value = r.email;
+        $('phone').value = r.phone;
+        $('city').value = r.city;
+        $('district').value = r.district;
+        $('btnSave').textContent = 'Update';
+        $('btnCancel').hidden = false;
+    }
+
+    function resetForm(){
+        $('id').value = '';
+        $('name').value = '';
+        $('username').value = '';
+        $('email').value = '';
+        $('phone').value = '';
+        $('city').value = '';
+        $('district').value = '';
+        $('btnSave').textContent = 'Save';
+        $('btnCancel').hidden = true;
+    }
+
+    /* 삭제하기 */
+    function removeData(id){
+        if (!confirm('정말 삭제할까요?')) return;
+        const xhr = new XMLHttpRequest();
+        xhr.open('DELETE', `${BASE}/data/${id}`);
+        xhr.send();
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                getList();
+            } else {
+                console.log(xhr.status, xhr.statusText);
+            }
+        }
+    }
+    </script>
+</body>
+</html>
