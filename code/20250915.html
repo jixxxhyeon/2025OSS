@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <h2>HTML Forms</h2>
+    <div>사용자 정보 입력</div>
+
+    <form action="form.ok.html" method="POST">
+        <!-- action은 정보를 제출할 url!, method는 폼 데이터를 전송하는 방식! -->
+        <label for="input_name">이름: </label><br />
+        <!-- 라벨에서 for는 인풋의 아이디값을 입력해야함! -->
+        <input type="text" name="name" id="input_name" placeholder="내용을 입력해주세요."/><br />
+        <!-- placeholder는 아무것도 입력되지 않았을 때, 가이드 문구처럼 나오는 것! -->
+
+        <label for="input_email">이메일: </label><br />
+        <input type="text" name="email" id="input_email"/>
+    
+        <fieldset>
+            <legend>필드셋의 라벨같은 것!</legend>
+            <label for="input_phone">전화번호: </label><br />
+            <input type="text" name="phone" id="input_phone"/><br />
+            <label for="input_address">주소: </label><br />
+            <input type="text" name="address" id="input_address"/>
+        </fieldset>
+
+        <!-- readonly 기능
+        * type='text'와 같이 정의하면, 해당 타입만 readonly가 적용된다.
+        -->
+        <div>
+            <label for="input_text">TEXT</label>
+            <input type="text" id="input_text" readonly/>
+            <style>
+                input[type='text']:read-only{
+                    background-color: aquamarine;
+                }
+            </style>
+        </div>
+        <div>
+            <label for="input_password">PASSWORD</label>
+            <input type="password" name="password" id="input_password"/>
+        </div>
+        <div>
+            <label for="input_number">NUMBER</label>
+            <input type="number" name="number" id="input_number"/>
+        </div>
+        <div>
+            <label for="input_date">DATE</label>
+            <input type="date" name="date" id="input_date"/>
+        </div>
+        <div>
+            <label for="input_time">TIME</label>
+            <input type="time" name="time" id="input_time"/>
+        </div>
+        <div>
+            <label for="input_hidden">HIDDEN</label>
+            <input type="hidden" name="hidden" id="input_hidden"/>112233
+            <!-- 
+            * div에 적용하고 싶은데, input만 안보이게 하고싶은 경우, 사용한다.
+            * display: none을 사용하기 귀찮은 경우, hidden을 사용하기도 한다.
+             -->
+            <input type="text" name="hidden1" id="input_hidden_1" style="display: none;"/>
+        </div>
+
+        <!-- 단일 선택지(radio) -->
+        <div>
+            <label for="input_radio_1">남</label>
+            <input type="radio" name="input_radio" id="input_radio_1"/>
+        </div>
+        <div>
+            <label for="input_radio_2">여</label>
+            <input type="radio" name="input_radio" id="input_radio_2"/>
+        </div>
+        <div>
+            <label for="input_radio_3">선택없음</label>
+            <input type="radio" name="input_radio" id="input_radio_3"/>
+        </div>
+
+        <!-- 중복 선택지(checkbox) -->
+        <div>
+            <label for="input_checkbox_1">축구</label>
+            <input type="checkbox" name="input_checkbox" id="input_checkbox_1"/>
+        </div>
+        <div>
+            <label for="input_checkbox_2">농구</label>
+            <input type="checkbox" name="input_checkbox" id="input_checkbox_2"/>
+        </div>
+
+        <!-- 파일 첨부하기 -->
+        <div>
+            <label for="input_file">FILE</label>
+            <input type="file" name="input_file" id="input_file"/>
+        </div>
+
+        <input type="submit" value="제출"/>
+        <input type="reset" value="취소"/>
+    </form>
+</body>
+</html>

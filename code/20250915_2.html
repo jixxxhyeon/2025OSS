@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div>
+        <label for="input_name">이름:</label><br />
+        <input type="text" name="name" id="input_name"/>
+    </div>
+    <div>
+        <label for="input_password">비밀번호:</label><br />
+        <input type="password" name="password" id="input_password"/>
+    </div>
+    <div>
+        <label for="input_phone">전화번호:</label><br />
+        <input type="text" name="phone" id="input_phone"/>
+    </div>
+
+    <div>
+        성별: 
+        <label for="input_radio_1">남</label>
+        <input type="radio" name="input_radio" id="input_radio_1"/>
+        <label for="input_radio_2">여</label>
+        <input type="radio" name="input_radio" id="input_radio_2"/>
+    </div>
+
+    <!-- 선택지 여러개 형식
+    * <option value="1">내용</option> : "내용"을 선택하면, 실제 데이터는 1로 저장된다.
+    * <option selected>내용</option> : 다른 선택지를 선택하기 이전에, 보여지는 기초 선택지를 지정할 수 있다. 
+    * <select type="" name="" id="" multiple> : 복수 선택이 가능하게 한다.
+    -->
+    <div>
+        <label for="select_1">SELECT</label>
+        <select name="select_1" id="select_1">
+            <option>1학년</option>
+            <option>2학년</option>
+            <option selected>3학년</option>
+            <option>4학년</option>
+            <option>5+학년</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="input_list">LIST</label>
+        <input list="list_fruit" id="input_list" name="list">
+        <datalist id="list_fruit">
+            <option value="apple" label="사과">
+            <option value="orange" label="오렌지">
+            <option value="grape" label="포도">
+        </datalist>
+    </div>
+</body>
+</html>

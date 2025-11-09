@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <h2>덧셈 계산기입니다!</h2>
+    <form>
+        <input type="number" id="input_num1" />+
+        <input type="number" id="input_num2" />
+        <button type="button" onclick="listener_add()">=</button>
+        <input type="number" id="input_result" /><br />
+        <input type="reset" value="취소">
+    </form>
+
+    <div id="div_test" 
+    data-original = "안녕하세요!"
+    onclick="alert('clicked!')"
+    onmouseover="console.log('mouse in..'); listener_mouseover();"
+    onmouseout="listener_mouseout();"
+    style="background-color: blanchedalmond; height: 200px">안녕하세요!</div>
+
+    <script>
+        // mouseout이면, 기존 색상과 높이로 다시 변경된다.
+        function listener_mouseout() {
+            let div_test = document.getElementById("div_test");
+            div_test.style.backgroundColor = "blanchedalmond";
+            div_test.style.height = "200px";
+            div_test.innerText = div_test.dataset.original;
+        }
+        // mouseover이면, 지정한 색상과 높이로 변경된다. 
+        function listener_mouseover() {
+            let div_test = document.getElementById("div_test");
+            div_test.style.backgroundColor = "yellow";
+            div_test.style.height = "30px";
+            div_test.innerText = "하하하 이건 몰랐지!"
+        }
+        // 두 수의 값을 가져와 객체로 변경해, result값을 반환하는 메소드
+        function listener_add() {
+            let input_num1 = document.getElementById("input_num1");
+            let input_num2 = document.getElementById("input_num2");
+            // string값을 객체로 바꿔주는 메소드 (Number)
+            let sum = Number(input_num1.value) + Number(input_num2.value);
+
+            let input_result = document.getElementById("input_result");
+            input_result.value = sum;
+            alert(sum);
+        }
+        
+    </script>
+    
+</body>
+</html>
