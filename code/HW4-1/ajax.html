@@ -1,48 +1,48 @@
 <!doctype html>
 <html lang="ko">
 <head>
-    <meta charset="utf-8">
-    <title>AJAX 실습(XHR)</title>
-    <style>
-        body { font-family: system-ui, sans-serif; margin: 24px; }
-        #contents { background: white; padding: 12px; min-height: 140px; }
-        .row { margin: 8px 0; display: flex; gap: 8px; flex-wrap: wrap; }
-        input { padding: 6px 8px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-        th, td { border-bottom: 1px solid #ddd; padding: 8px; text-align: left; }
-        small.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #666; }
-        .actions button { margin-right: 6px; }
-    </style>
+  <meta charset="utf-8" />
+  <title>AJAX 실습 (로컬 전용 XHR)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    #contents { background: #fff; padding: 12px; min-height: 140px; }
+    .row { margin: 8px 0; display: flex; gap: 8px; flex-wrap: wrap; }
+    input { padding: 6px 8px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border-bottom: 1px solid #ddd; padding: 8px; text-align: left; }
+    .actions button { margin-right: 6px; }
+    .mono { font-family: ui-monospace, Menlo, SFMono-Regular, monospace; color:#666; }
+  </style>
 </head>
 <body>
+  <h1>AJAX 실습 (로컬 전용 XHR)</h1>
+  <p class="mono">API: http://localhost:3001/data</p>
 
-    <h1>AJAX 실습(XHR) Data list</h1>
-    <p class="small">API: <span class="mono">GET/POST/PUT/DELETE http://localhost:3001/data</span></p>
+  <!-- 조작 -->
+  <div class="row">
+    <button id="btnLoad">데이터 가져오기</button>
+  </div>
 
-    <!-- Get 버튼 -->
-    <div class="row">
-      <button id="btnLoad">데이터 가져오기</button>
-    </div>
+  <!-- 입력 폼 (POST/PUT 공용) -->
+  <div class="row">
+    <input id="id" type="hidden">
+    <input id="name" placeholder="name">
+    <input id="username" placeholder="username">
+    <input id="email" placeholder="email">
+    <input id="phone" placeholder="phone" style="width:140px">
+    <input id="city" placeholder="city">
+    <input id="district" placeholder="district">
+    <button id="btnSave">Save</button>
+    <button id="btnCancel" type="button" hidden>Cancel</button>
+  </div>
 
-    <!-- 입력 폼 Post, Put은 공용으로 -->
-    <div class="row">
-      <input id="id" type="hidden">
-      <input id="name" placeholder="name">
-      <input id="username" placeholder="username">
-      <input id="email" placeholder="email">
-      <input id="phone" placeholder="phone" style="width:140px">
-      <input id="city" placeholder="city">
-      <input id="district" placeholder="district">
-      <button id="btnSave">Save</button>
-      <button id="btnCancel" type="button" hidden>Cancel</button>
-    </div>
+  <!-- 결과 -->
+  <div id="contents"></div>
 
-    <!-- 결과 -->
-    <div id="contents"></div>
-
-    <script>
-    const BASE = 'https://68dde6ffd7b591b4b78dd590.mockapi.io/api/vi';
-
+  <script>
+    // 로컬 전용
+    const BASE = 'http://localhost:3001';
+    const ENDPOINT = BASE + '/data';
     const $ = id => document.getElementById(id);
     const contents = $('contents');
 
@@ -50,61 +50,59 @@
       $('btnLoad').addEventListener('click', getList);
       $('btnSave').addEventListener('click', saveData);
       $('btnCancel').addEventListener('click', resetForm);
-      getList(); 
+      getList(); // 처음 자동 로드
     };
 
-    /* 읽어오기(READ) */
+    /* READ */
     function getList() {
       const xhr = new XMLHttpRequest();
-      xhr.open('GET', BASE + '/data');
+      xhr.open('GET', ENDPOINT);
       xhr.setRequestHeader('content-type', 'application/json');
-      xhr.send();
-
       xhr.onload = () => {
         if (xhr.status === 200) {
           const rows = JSON.parse(xhr.response);
           contents.innerHTML = renderTable(rows);
         } else {
-          console.log(xhr.status, xhr.statusText);
+          contents.innerHTML = `<p>불러오기 실패: ${xhr.status} ${xhr.statusText}</p>`;
         }
-      }
+      };
+      xhr.onerror = () => contents.innerHTML = `<p>네트워크 오류</p>`;
+      xhr.send();
     }
 
-    /* 보기(View) */
+    /* VIEW */
     function renderTable(rows) {
       if (!Array.isArray(rows)) return '<p>데이터가 없습니다.</p>';
-      const thead = `
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th><th>Name</th><th>Username</th><th>Email</th>
-            <th>Phone</th><th>City</th><th>District</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-        ${rows.map(r => `
-          <tr>
-            <td>${r.id}</td>
-            <td>${r.name ?? ''}</td>
-            <td>${r.username ?? ''}</td>
-            <td>${r.email ?? ''}</td>
-            <td>${r.phone ?? ''}</td>
-            <td>${r.city ?? ''}</td>
-            <td>${r.district ?? ''}</td>
-            <td class="actions">
-              <button onclick='fillForm(${JSON.stringify(slim(r)).replace(/'/g,"&apos;")})'>Edit</button>
-              <!-- 변경 ②: id를 따옴표로 감싸서 문자열 id도 안전하게 -->
-              <button onclick="removeData('${r.id}')">Del</button>
-            </td>
-          </tr>
-        `).join('')}
-        </tbody>
-      </table>
+      return `
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th><th>Name</th><th>Username</th><th>Email</th>
+              <th>Phone</th><th>City</th><th>District</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr>
+                <td>${r.id}</td>
+                <td>${r.name ?? ''}</td>
+                <td>${r.username ?? ''}</td>
+                <td>${r.email ?? ''}</td>
+                <td>${r.phone ?? ''}</td>
+                <td>${r.city ?? ''}</td>
+                <td>${r.district ?? ''}</td>
+                <td class="actions">
+                  <button onclick='fillForm(${JSON.stringify(slim(r)).replace(/'/g,"&apos;")})'>Edit</button>
+                  <button onclick="removeData(${r.id})">Del</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
       `;
-      return thead;
     }
 
-    function slim(r){
+    function slim(r) {
       return {
         id: r.id,
         name: r.name || '',
@@ -116,8 +114,8 @@
       };
     }
 
-    /* 생성, 수정하기 */
-    function saveData(e){
+    /* CREATE / UPDATE */
+    function saveData(e) {
       e.preventDefault();
 
       const payload = {
@@ -132,38 +130,32 @@
       const editingId = $('id').value;
 
       if (editingId) {
-        // Put
+        // PUT (json-server는 숫자 id OK)
         const xhr = new XMLHttpRequest();
-        xhr.open('PUT', `${BASE}/data/${editingId}`);
+        xhr.open('PUT', `${ENDPOINT}/${editingId}`);
         xhr.setRequestHeader('content-type', 'application/json; charset=UTF-8');
-        // 변경 ①: mockapi 호환을 위해 id를 바디에 보내지 않음(문자열 id 충돌 방지)
-        xhr.send(JSON.stringify(payload));
+        // json-server는 바디에 id 있어도/없어도 동작하지만, 여기선 명시
+        xhr.send(JSON.stringify({ id: Number(editingId), ...payload }));
         xhr.onload = () => {
-          if (xhr.status === 200) {
-            resetForm();
-            getList();
-          } else {
-            console.log(xhr.status, xhr.statusText);
-          }
+          if (xhr.status === 200) { resetForm(); getList(); }
+          else contents.innerHTML = `<p>수정 실패: ${xhr.status}</p>`;
         };
+        xhr.onerror = () => contents.innerHTML = `<p>네트워크 오류(수정)</p>`;
       } else {
-        // Post
+        // POST (id는 json-server가 자동 채번)
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', BASE + '/data');
+        xhr.open('POST', ENDPOINT);
         xhr.setRequestHeader('content-type', 'application/json; charset=UTF-8');
         xhr.send(JSON.stringify(payload));
         xhr.onload = () => {
-          if (xhr.status === 201) {
-            resetForm();
-            getList();
-          } else {
-            console.log(xhr.status, xhr.statusText);
-          }
+          if (xhr.status === 201) { resetForm(); getList(); }
+          else contents.innerHTML = `<p>생성 실패: ${xhr.status}</p>`;
         };
+        xhr.onerror = () => contents.innerHTML = `<p>네트워크 오류(생성)</p>`;
       }
     }
 
-    function fillForm(r){
+    function fillForm(r) {
       $('id').value = r.id;
       $('name').value = r.name;
       $('username').value = r.username;
@@ -175,7 +167,7 @@
       $('btnCancel').hidden = false;
     }
 
-    function resetForm(){
+    function resetForm() {
       $('id').value = '';
       $('name').value = '';
       $('username').value = '';
@@ -187,20 +179,18 @@
       $('btnCancel').hidden = true;
     }
 
-    /* 삭제하기 */
-    function removeData(id){
+    /* DELETE */
+    function removeData(id) {
       if (!confirm('정말 삭제할까요?')) return;
       const xhr = new XMLHttpRequest();
-      xhr.open('DELETE', `${BASE}/data/${id}`);
-      xhr.send();
+      xhr.open('DELETE', `${ENDPOINT}/${id}`);
       xhr.onload = () => {
-        if (xhr.status === 200) {
-          getList();
-        } else {
-          console.log(xhr.status, xhr.statusText);
-        }
-      }
+        if (xhr.status === 200) getList();
+        else contents.innerHTML = `<p>삭제 실패: ${xhr.status}</p>`;
+      };
+      xhr.onerror = () => contents.innerHTML = `<p>네트워크 오류(삭제)</p>`;
+      xhr.send();
     }
-    </script>
+  </script>
 </body>
 </html>
